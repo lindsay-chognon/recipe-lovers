@@ -83,4 +83,21 @@ class IngredientController extends AbstractController
         ]);
     }
 
+    #[Route('ingredient/edition/{id}', 'ingredient.edit', methods: ['GET', 'POST'])]
+    public function edit(
+        IngredientRepository $repository, 
+        int $id
+        ) : Response {
+        
+        // Need to create form with ingredient
+        // Ingredient is catched by ingredient's repository
+        $ingredient = $repository->findOneBy(['id' => $id]);
+        $form = $this->createForm(IngredientType::class, $ingredient);
+
+        return $this->render('pages/ingredient/edit.html.twig', [
+            'form' => $form->createView()
+        ]);
+
+    }
+
 }
