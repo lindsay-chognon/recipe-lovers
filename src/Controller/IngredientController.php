@@ -62,6 +62,8 @@ class IngredientController extends AbstractController
                 'success',
                 'Votre ingrédient a été créé avec succès !'
             );
+
+            return $this->redirectToRoute('ingredient');
         } else {
             $this->addFlash(
                 'warning',
