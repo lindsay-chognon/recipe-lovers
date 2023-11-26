@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class IngredientController extends AbstractController
 {
     /**
-     * Display all comments
+     * Display all ingredients with pagination
      *
      * @param IngredientRepository $repository
      * @param PaginatorInterface $paginator
@@ -41,6 +41,13 @@ class IngredientController extends AbstractController
         ]);
     }
 
+    /**
+     * Add new ingredient
+     *
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
     #[Route('/ingredient/nouveau', name: 'ingredient.new', methods: ['GET', 'POST'])]
     public function new(
         Request $request,
@@ -75,4 +82,5 @@ class IngredientController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
 }
