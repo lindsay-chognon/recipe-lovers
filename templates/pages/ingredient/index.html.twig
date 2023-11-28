@@ -11,7 +11,7 @@
             {# Si on met à jour l'url, le lien du bouton restera ok #}
 
             <a href="{{ path('ingredient.new') }}" class="btn btn-primary">
-                Créér un ingrédient
+                er un ingrédient
             </a>
 
 
@@ -38,10 +38,10 @@
                 </thead>
                 <tbody>
                     {% for ingredient in ingredients %}
-                        <tr class="table-secondary">
+                        <tr class="table-primary">
                         <th scope="row">{{ ingredient.id }}</th>
                         <td>{{ ingredient.name }}</td>
-                        <td>{{ ingredient.price }}</td>
+                        <td>{{ ingredient.price }}</td>      
                         <td>{{ ingredient.createdAt|date("d/m/Y") }}</td>
                     </tr>
                     {% endfor %} 
