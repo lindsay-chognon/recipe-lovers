@@ -7,6 +7,7 @@ use App\Form\IngredientType;
 use App\Repository\IngredientRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -84,15 +85,36 @@ class IngredientController extends AbstractController
     }
 
     #[Route('ingredient/edition/{id}', 'ingredient.edit', methods: ['GET', 'POST'])]
-    public function edit(
-        IngredientRepository $repository, 
-        int $id
+     public function edit(
+        Ingredient $ingredient,
+        Request $request,
+        EntityManagerInterface $manager
         ) : Response {
         
         // Need to create form with ingredient
-        // Ingredient is catched by ingredient's repository
-        $ingredient = $repository->findOneBy(['id' => $id]);
+        // Symfony automaticaly get the indredient's id from the entity with the param converter
         $form = $this->createForm(IngredientType::class, $ingredient);
+
+        $form->handleRequest($request);
+
+        // if the form is submit and valid comparated to different constraints in IngredientType
+        if ($form->isSubmitted() && $form->isValid()) {
+            $ingredient = $form->getData();
+            $manager->persist($ingredient);
+            $manager->flush();
+
+            $this->addFlash(
+                'success',
+                'Votre ingrédient a été modifié avec succès !'
+            );
+
+            return $this->redirectToRoute('ingredient');
+        } else {
+            $this->addFlash(
+                'warning',
+                'Il y a un problème.'
+            );
+        }
 
         return $this->render('pages/ingredient/edit.html.twig', [
             'form' => $form->createView()
