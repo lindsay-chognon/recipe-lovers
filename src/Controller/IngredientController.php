@@ -84,6 +84,14 @@ class IngredientController extends AbstractController
         ]);
     }
 
+    /**
+     * Edit ingredient
+     *
+     * @param Ingredient
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
     #[Route('ingredient/edition/{id}', 'ingredient.edit', methods: ['GET', 'POST'])]
      public function edit(
         Ingredient $ingredient,
@@ -121,5 +129,7 @@ class IngredientController extends AbstractController
         ]);
 
     }
+
+    
 
 }
