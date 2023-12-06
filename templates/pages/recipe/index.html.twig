@@ -31,7 +31,7 @@
                         <th scope="row">{{ recipe.id }}</th>
                         <td>{{ recipe.name }}</td>
                         <td>{{ (recipe.price is same as(null)) ? 'Non renseigné' : recipe.price }}</td>    
-                        <td>{{ recipe.difficulty }}</td>  
+                        <td>{{ (recipe.difficulty is same as(null)) ? 'Non renseigné' : recipe.difficulty }}</td>    
                         <td>{{ recipe.createdAt|date("d/m/Y") }}</td>
                         <td>TODO</td>
                         <td>TODO</td>
