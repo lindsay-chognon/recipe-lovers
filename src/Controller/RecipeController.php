@@ -86,4 +86,50 @@ class RecipeController extends AbstractController
         ]);
 
     }
+
+    /**
+     * Edit recipe
+     *
+     * @param Ingredient
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @return Response
+     */
+    #[Route('recette/edition/{id}', 'recipe.edit', methods: ['GET', 'POST'])]
+     public function edit(
+        Recipe $recipe,
+        Request $request,
+        EntityManagerInterface $manager
+        ) : Response {
+        
+        // Need to create form with recipe
+        // Symfony automaticaly get the recipe's id from the entity with the param converter
+        $form = $this->createForm(RecipeType::class, $recipe);
+
+        $form->handleRequest($request);
+
+        // if the form is submit and valid comparated to different constraints in RecipeType
+        if ($form->isSubmitted() && $form->isValid()) {
+            $recipe = $form->getData();
+            $manager->persist($recipe);
+            $manager->flush();
+
+            $this->addFlash(
+                'success',
+                'Votre recette a été modifiée avec succès !'
+            );
+
+            return $this->redirectToRoute('recipe');
+        } else {
+            $this->addFlash(
+                'warning',
+                'Il y a un problème.'
+            );
+        }
+
+        return $this->render('pages/recipe/edit.html.twig', [
+            'form' => $form->createView()
+        ]);
+
+    }
 }
