@@ -44,7 +44,7 @@
                         <td>{{ (recipe.difficulty is same as(null)) ? 'Non renseigné' : recipe.difficulty }}</td>    
                         <td>{{ recipe.createdAt|date("d/m/Y") }}</td>
                         <td><a href="{{ path('recipe.edit', { id: recipe.id }) }}" class='btn btn-info'>Modifier</a></td>
-                        <td>TODO</td>
+                        <td><a href="{{ path('recipe.delete', { id: recipe.id }) }}" class='btn btn-danger'>Supprimer</a></td>
                     </tr>
                     {% endfor %} 
                 </tbody>
