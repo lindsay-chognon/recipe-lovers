@@ -20,5 +20,12 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+    # nouveau service qui matche la ressource entityListener
+    # on lui accroche un tag avec un tableau contenant ce que l'on veut appeler
+    App\EntityListener\:
+        resource: "../src/EntityListener/"
+        tags: ["doctrine.orm.entity_listener"]
+
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

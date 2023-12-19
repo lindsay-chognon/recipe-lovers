@@ -72,7 +72,8 @@ class AppFixtures extends Fixture
                 ->setFullName($this->faker->name())
                 ->setPseudo(mt_rand(0, 1) === 1 ? $this->faker->firstName() : null)
                 ->setEmail($this->faker->email())
-                ->setRoles(['ROLE_USER']);
+                ->setRoles(['ROLE_USER'])
+                ->setPlainPassword('password');
 
             // useless method to hash password to much redundant
             // We finally use Entity listener
