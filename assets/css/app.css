@@ -1,0 +1,7 @@
+/* Vars */
+
+/* Forms */
+#recipe_ingredients {
+    display: flex;
+    flex-direction: column;
+}
