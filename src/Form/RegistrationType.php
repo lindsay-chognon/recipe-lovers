@@ -3,15 +3,15 @@
 namespace App\Form;
 
 use App\Entity\User;
-use Doctrine\DBAL\Types\TextType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 
 class RegistrationType extends AbstractType
 {
@@ -26,7 +26,7 @@ class RegistrationType extends AbstractType
                 ],
                 'label' => 'Adresse e-mail',
                 'label_attr' => [
-                    'class' => 'form-label'
+                    'class' => 'form-label mt-4'
                 ],
                 'constraints' => [
                     new Assert\NotBlank(),
@@ -42,7 +42,7 @@ class RegistrationType extends AbstractType
                 ],
                 'label' => 'Prénom NOM',
                 'label_attr' => [
-                    'class' => 'form-label'
+                    'class' => 'form-label mt-4'
                 ],
                 'constraints' => [
                     new Assert\NotBlank(),
@@ -55,31 +55,43 @@ class RegistrationType extends AbstractType
                     'minlength' => '2',
                     'maxlength' => '50'
                 ],
+                'required' => false,
                 'label' => 'Pseudo (facultatif)',
                 'label_attr' => [
-                    'class' => 'form-label'
+                    'class' => 'form-label mt-4'
                 ],
                 'constraints' => [
                     new Assert\Length(['min' => 2, 'max' => 50])
                 ]
             ])
             // password is a repeated type (https://symfony.com/doc/current/reference/forms/types/repeated.html)
-            ->add('password', RepeatedType::class, [
+            ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'first_options' => [
-                    'label' => 'Mot de passe'
+                    'attr' => [
+                        'class' => 'form-control'
+                    ],
+                    'label' => 'Mot de passe',
+                    'label_attr' => [
+                        'class' => 'form-label mt-4'
+                    ]
                 ],
                 'second_options' => [
-                    'label' => 'Confirmation du mot de passe'
+                    'attr' => [
+                        'class' => 'form-control'
+                    ],
+                    'label' => 'Confirmation du mot de passe',
+                    'label_attr' => [
+                        'class' => 'form-label mt-4'
+                    ]
                 ],
-                [
-                    'invalid_message' => 'Les mots de passe doivent être identiques.'
-                ]
+                'invalid_message' => 'Les mots de passe doivent être identiques.'
             ])
             ->add('submit', SubmitType::class, [
                 'attr' => [
-                    'class' => 'btn btn-primary'
-                ]
+                    'class' => 'btn btn-primary mt-4'
+                ],
+                'label' => "S'inscrire"
             ])
         ;
     }
