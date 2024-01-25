@@ -6,6 +6,12 @@
     <div class="container">
         <h1 class="mt-4">Formulaire de modification des informations de l'utilisateur</h1>
 
+        {% for message in app.flashes('warning') %}
+            <div class="alert alert-danger mt-4">
+                {{ message }}
+            </div>
+        {% endfor %}
+
         {{ form(form) }}
     </div>
 {% endblock %}
