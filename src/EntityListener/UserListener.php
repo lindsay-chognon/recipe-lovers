@@ -28,17 +28,6 @@ class UserListener {
     }
 
     /**
-     * To encode password before persist update
-     * @param User $user
-     * @return void
-     */
-    public function preUpdate(User $user) {
-
-        $this->encodePassword($user);
-
-    }
-
-    /**
      * Encode password based on plain password
      * @param User $user
      * @return void
