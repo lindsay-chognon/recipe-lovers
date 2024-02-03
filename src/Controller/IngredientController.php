@@ -65,6 +65,7 @@ class IngredientController extends AbstractController
         // if the form is submit and valid comparated to different constraints in IngredientType
         if ($form->isSubmitted() && $form->isValid()) {
             $ingredient = $form->getData();
+            $ingredient->setUser($this->getUser());
             $manager->persist($ingredient);
             $manager->flush();
 
