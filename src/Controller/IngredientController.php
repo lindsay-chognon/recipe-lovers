@@ -32,7 +32,9 @@ class IngredientController extends AbstractController
     {
 
         $ingredients = $paginator->paginate(
-            $repository->findAll(),
+            // to get only user ingredients
+            // $this->>getUser get current user from symfony token
+            $repository->findBy(['user' => $this->getUser()]),
             $request->query->getInt('page', 1),
             10
         );
