@@ -59,6 +59,14 @@ class UserController extends AbstractController
         ]);
     }
 
+    /**
+     * Allow user to edit his password
+     * @param User $user
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @param UserPasswordHasherInterface $hasher
+     * @return Response
+     */
     #[Route('/utilisateur/edition-mot-de-passe/{id}', name: 'user.edit.password', methods: ['GET', 'POST'])]
     public function editPassword(
         User $user,
@@ -67,14 +75,25 @@ class UserController extends AbstractController
         UserPasswordHasherInterface $hasher
     ) : Response {
 
+        // we check is user is logged
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('security.login');
+        }
+
+        //current user is same as user get by ID in route
+        if ($this->getUser() !== $user) {
+            return $this->redirectToRoute('recipe');
+        }
+
         $form = $this->createForm(UserPasswordType::class);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             if ($hasher->isPasswordValid($user, $form->getData()['plainPassword'])) {
-                $user->setPassword(
-                    $hasher->hashPassword($user, $form->getData()['newPassword'])
+                $user->setUpdatedAt(new \DateTimeImmutable());
+                $user->setPlainPassword(
+                    $form->getData()['newPassword']
                 );
 
                 $manager->persist($user);
