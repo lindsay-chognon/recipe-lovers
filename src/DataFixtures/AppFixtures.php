@@ -24,14 +24,43 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager): void {
 
+        // Users
+        $users = [];
+        // need to call UserPasswordHasherInterface to encode password via dependance injection
+        for ($i = 0; $i < 10; $i++) {
+            $user = new User();
+            $user
+                ->setFullName($this->faker->name())
+                ->setPseudo(mt_rand(0, 1) === 1 ? $this->faker->firstName() : null)
+                ->setEmail($this->faker->email())
+                ->setRoles(['ROLE_USER'])
+                ->setPlainPassword('password');
+
+            // useless method to hash password to much redundant
+            // We finally use Entity listener
+            /*  $hashedPassword = $this->hasher->hashPassword(
+                $user,
+                'password'
+            );
+            $user->setPassword($hashedPassword);
+            */
+
+            // stocking user before persist to use in next fixtures
+            $users[] = $user;
+
+            $manager->persist($user);
+
+        }
+
         // ingredients
         // put ingredients in array to use in recipes
         $ingredients = [];
         for ($i = 0; $i <= 50; $i++) { 
             $ingredient = new Ingredient();
             $ingredient
-            ->setName($this->faker->word())
-            ->setPrice(mt_rand(1, 100))
+                ->setName($this->faker->word())
+                ->setPrice(mt_rand(1, 100))
+                ->setUser($users[mt_rand(0, count($users) - 1)])
             ;
 
         $ingredients[] = $ingredient;
@@ -61,31 +90,6 @@ class AppFixtures extends Fixture
             }
 
             $manager->persist($recipe);
-
-        }
-
-        // Users
-        // need to call UserPasswordHasherInterface to encode password via dependance injection
-        for ($i = 0; $i < 10; $i++) {
-            $user = new User();
-            $user
-                ->setFullName($this->faker->name())
-                ->setPseudo(mt_rand(0, 1) === 1 ? $this->faker->firstName() : null)
-                ->setEmail($this->faker->email())
-                ->setRoles(['ROLE_USER'])
-                ->setPlainPassword('password');
-
-            // useless method to hash password to much redundant
-            // We finally use Entity listener
-            /*  $hashedPassword = $this->hasher->hashPassword(
-                $user,
-                'password'
-            );
-            $user->setPassword($hashedPassword);
-            */
-
-
-            $manager->persist($user);
 
         }
 
