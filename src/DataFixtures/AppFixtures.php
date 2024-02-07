@@ -72,16 +72,17 @@ class AppFixtures extends Fixture
         for ($j = 0; $j < 25; $j++) { 
             $recipe = new Recipe();
             $recipe
-            ->setName($this->faker->word())
-            // time could be null
-            // so if time is 1, mt_rand for time
-            // else time is null
-            ->setTime(mt_rand(0, 1) == 1 ? mt_rand(1, 1440) : null)
-            ->setNbPeople(mt_rand(0, 1) == 1 ? mt_rand(1, 50) : null)
-            ->setDifficulty(mt_rand(0, 1) == 1 ? mt_rand(1, 5) : null)
-            ->setDescription($this->faker->text(300))
-            ->setPrice(mt_rand(0, 1) == 1 ? mt_rand(1, 1000) : null)
-            ->setIsFavorite(mt_rand(0, 1) == 1 ? true : false)
+                ->setName($this->faker->word())
+                // time could be null
+                // so if time is 1, mt_rand for time
+                // else time is null
+                ->setTime(mt_rand(0, 1) == 1 ? mt_rand(1, 1440) : null)
+                ->setNbPeople(mt_rand(0, 1) == 1 ? mt_rand(1, 50) : null)
+                ->setDifficulty(mt_rand(0, 1) == 1 ? mt_rand(1, 5) : null)
+                ->setDescription($this->faker->text(300))
+                ->setPrice(mt_rand(0, 1) == 1 ? mt_rand(1, 1000) : null)
+                ->setIsFavorite(mt_rand(0, 1) == 1 ? true : false)
+                ->setUser($users[mt_rand(0, count($users) - 1)])
             ;
 
             // for one recipe add between 5 and 15 ingredients
