@@ -8,23 +8,33 @@ use Assert\NotBlank;
 use Assert\Positive;
 use App\Entity\Recipe;
 use App\Entity\Ingredient;
-use Doctrine\ORM\QueryBuilder;
 use App\Repository\IngredientRepository;
+use Doctrine\ORM\QueryBuilder;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\RangeType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class RecipeType extends AbstractType
 {
+    private $token;
+
+    /**
+     * To get current user
+     * @param TokenStorageInterface $token
+     */
+    public function __construct(TokenStorageInterface $token) {
+        $this->token = $token;
+    }
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -137,6 +147,8 @@ class RecipeType extends AbstractType
                 'class' => Ingredient::class,
                 'query_builder' => function (IngredientRepository $r): QueryBuilder {
                     return $r->createQueryBuilder('i')
+                        ->where('i.user = :user')
+                        ->setParameter(':user',$this->token->getToken()->getUser() )
                         ->orderBy('i.name', 'ASC');
                 },
                 'label' => 'Les ingrédients',
