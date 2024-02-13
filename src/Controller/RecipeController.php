@@ -8,6 +8,7 @@ use App\Repository\RecipeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -50,6 +51,7 @@ class RecipeController extends AbstractController
      * @return Response
      */
     #[Route('/recette/nouveau', name: 'recipe.new', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_USER')]
     public function new(
         Request $request,
         EntityManagerInterface $manager
@@ -99,6 +101,7 @@ class RecipeController extends AbstractController
      * @return Response
      */
     #[Route('recette/edition/{id}', 'recipe.edit', methods: ['GET', 'POST'])]
+    #[Security("is_granted('ROLE_USER') and user === recipe.getUser()")]
      public function edit(
         Recipe $recipe,
         Request $request,

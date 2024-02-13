@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -54,6 +55,7 @@ class IngredientController extends AbstractController
      * @return Response
      */
     #[Route('/ingredient/nouveau', name: 'ingredient.new', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_USER')]
     public function new(
         Request $request,
         EntityManagerInterface $manager
@@ -97,6 +99,7 @@ class IngredientController extends AbstractController
      * @param EntityManagerInterface $manager
      * @return Response
      */
+    #[Security("is_granted('ROLE_USER') and user === ingredient.getUser()")]
     #[Route('ingredient/edition/{id}', 'ingredient.edit', methods: ['GET', 'POST'])]
      public function edit(
         Ingredient $ingredient,
