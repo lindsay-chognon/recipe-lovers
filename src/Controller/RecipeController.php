@@ -43,6 +43,11 @@ class RecipeController extends AbstractController
         ]);
     }
 
+    /**
+     * Display a recipe if this one is public
+     * @param Recipe $recipe
+     * @return Response
+     */
     #[Security("is_granted('ROLE_USER') and recipe.isIsPublic() === true")]
     #[Route('/recette/{id}', 'recipe.show', methods: ['GET'])]
     public function show(Recipe $recipe) : Response {
