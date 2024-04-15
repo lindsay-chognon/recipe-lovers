@@ -19,13 +19,15 @@
             <h2 class="mt-4">Les dernières recettes partagées</h2>
             <div class="d-flex justify-content-between">
                 {% for recipe in recipes %}
-                    <div class="card border-primary mb-3 mr-3" style="max-width: 20rem;">
-                        <div class="card-header">{{ recipe.id }}</div>
-                        <div class="card-body">
-                            <h4 class="card-title">{{ recipe.name }}</h4>
-                            <p class="card-text">{{ recipe.description | slice(0, 100) ~'...' }}</p>
+                        <div class="card border-primary mb-3 mr-3" style="max-width: 20rem;">
+                            <div class="card-header">{{ recipe.id }}</div>
+                            <div class="card-body">
+                                <a href = "recette/{{ recipe.id }}">
+                                    <h4 class="card-title">{{ recipe.name }}</h4>
+                                </a>
+                                <p class="card-text">{{ recipe.description | slice(0, 100) ~'...' }}</p>
+                            </div>
                         </div>
-                    </div>
                 {% endfor %}
             </div>
 
