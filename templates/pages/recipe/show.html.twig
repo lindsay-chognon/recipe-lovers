@@ -1,5 +1,7 @@
 {% extends "base.html.twig" %}
 
+{# 6:43 #}
+
 {% block title %}
 Recipe lovers - {{ recipe.name }}
 {% endblock %}
@@ -7,6 +9,10 @@ Recipe lovers - {{ recipe.name }}
 {% block body %}
     <div class="container">
       <h1 class="mt-4">{{ recipe.name }}</h1>
+        <p>Note : {{ recipe.averageRating }} / 5</p>
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" style="width: {{ markPercent }}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
         <div>
             <span class="badge bg-primary">Créée le {{ recipe.createdAt|date('d/m/Y') }}</span>
         </div>

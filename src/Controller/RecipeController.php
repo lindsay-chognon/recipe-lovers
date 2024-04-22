@@ -67,8 +67,12 @@ class RecipeController extends AbstractController
     #[Security("is_granted('ROLE_USER') or recipe.isIsPublic() === true")]
     #[Route('/recette/{id}', 'recipe.show', methods: ['GET'])]
     public function show(Recipe $recipe) : Response {
+
+        // calculation for mark bar
+        $markPercent = ($recipe->getAverageRating() / 5) * 100;
         return $this->render('pages/recipe/show.html.twig', [
-            'recipe' => $recipe
+            'recipe' => $recipe,
+            'markPercent' => $markPercent,
         ]);
     }
 
