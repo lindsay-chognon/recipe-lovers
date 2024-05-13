@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Mark;
 use App\Entity\Recipe;
+use App\Form\MarkType;
 use App\Form\RecipeType;
+use App\Repository\MarkRepository;
 use App\Repository\RecipeRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -65,14 +68,51 @@ class RecipeController extends AbstractController
      * @return Response
      */
     #[Security("is_granted('ROLE_USER') or recipe.isIsPublic() === true")]
-    #[Route('/recette/{id}', 'recipe.show', methods: ['GET'])]
-    public function show(Recipe $recipe) : Response {
+    #[Route('/recette/{id}', 'recipe.show', methods: ['GET', 'POST'])]
+    public function show(
+        Recipe $recipe,
+        Request $request,
+        MarkRepository $markRepository,
+        EntityManagerInterface $entityManager,
+    ) : Response {
+
+        $mark = new Mark();
+        $form = $this->createForm(MarkType::class, $mark);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $mark->setUser($this->getUser())
+                ->setRecipe($recipe);
+
+            $existingMark = $markRepository->findOneBy([
+                'user' => $this->getUser(),
+                'recipe' => $recipe
+            ]);
+
+            if (!$existingMark) {
+                $entityManager->persist($mark);
+            } else {
+                $existingMark->setMark(
+                    $form->getData()->getMark()
+                );
+                $entityManager->persist($mark);
+            }
+            $entityManager->flush();
+
+            $this->addFlash(
+                'success',
+                'Votre note a bien été prise en compte.'
+            );
+
+            return $this->redirectToRoute('recipe.show', ['id' => $recipe->getId()]);
+        }
 
         // calculation for mark bar
         $markPercent = ($recipe->getAverageRating() / 5) * 100;
         return $this->render('pages/recipe/show.html.twig', [
             'recipe' => $recipe,
             'markPercent' => $markPercent,
+            'form' => $form->createView(),
         ]);
     }
 

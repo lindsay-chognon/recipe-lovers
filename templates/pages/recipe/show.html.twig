@@ -1,13 +1,18 @@
 {% extends "base.html.twig" %}
 
-{# 6:43 #}
-
 {% block title %}
 Recipe lovers - {{ recipe.name }}
 {% endblock %}
 
 {% block body %}
     <div class="container">
+
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success mt-4">
+                {{ message }}
+            </div>
+        {% endfor %}
+
       <h1 class="mt-4">{{ recipe.name }}</h1>
         <p>Note : {{ recipe.averageRating }} / 5</p>
         <div class="progress">
@@ -58,6 +63,10 @@ Recipe lovers - {{ recipe.name }}
             {% for ingredient in recipe.ingredients %}
                 <span class="badgle bg-primary">{{ ingredient.name }}</span>
             {% endfor %}
+        </div>
+
+        <div class="mark">
+            {{ form(form) }}
         </div>
 
     </div>
