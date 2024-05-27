@@ -123,6 +123,7 @@ class RecipeController extends AbstractController
      * @param EntityManagerInterface
      * @return Response
      */
+    // TODO : bug sur la route new
     #[Route('/recette/nouveau', name: 'recipe.new', methods: ['GET', 'POST'])]
     #[IsGranted('ROLE_USER')]
     public function new(
