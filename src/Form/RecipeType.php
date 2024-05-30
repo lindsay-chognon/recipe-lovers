@@ -65,10 +65,6 @@ class RecipeType extends AbstractType
                 'label_attr' => [
                     'class' => 'form-label mt-4'
                 ],
-                'constraints' => [
-                    new Assert\Positive(),
-                    new Assert\LessThan(1440)
-                ]
             ])
             ->add('nbPeople', IntegerType::class, [
                 'attr' => [
@@ -81,10 +77,6 @@ class RecipeType extends AbstractType
                 'label_attr' => [
                     'class' => 'form-label mt-4'
                 ],
-                'constraints' => [
-                    new Assert\Positive(),
-                    new Assert\LessThan(51)
-                ]
             ])
             ->add('difficulty', RangeType::class, [
                 'attr' => [
@@ -97,17 +89,8 @@ class RecipeType extends AbstractType
                 'label_attr' => [
                     'class' => 'form-label mt-4'
                 ],
-                'constraints' => [
-                    new Assert\Positive(),
-                    new Assert\LessThan(5)
-                ]
             ])
             ->add('description', TextareaType::class, [
-                'attr' => [
-                    'class' => 'form-control',
-                    'min' => 1,
-                    'max' => 5
-                ],
                 'label' => 'Description',
                 'label_attr' => [
                     'class' => 'form-label mt-4'
@@ -125,10 +108,7 @@ class RecipeType extends AbstractType
                 'label_attr' => [
                     'class' => 'form-label mt-4'
                 ],
-                'constraints' => [
-                    new Assert\Positive(),
-                    new Assert\LessThan(200)
-                ]
+
             ])  
             ->add('isFavorite', CheckboxType::class, [
                 'attr' => [
