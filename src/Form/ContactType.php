@@ -6,10 +6,10 @@ use App\Entity\Contact;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+use Symfony\Component\Validator\Constraints as Assert;
 
 
 class ContactType extends AbstractType
@@ -38,6 +38,11 @@ class ContactType extends AbstractType
                 'label_attr' => [
                     'class' => 'form-label mt-4'
                 ],
+                'constraints' => [
+                    new Assert\NotBlank(),
+                    new Assert\Email(),
+                    new Assert\Length(['min' => 2, 'max' => 180])
+                ]
             ])
             ->add('subject', TextType::class, [
                 'attr' => [
@@ -48,6 +53,9 @@ class ContactType extends AbstractType
                 'label' => 'Sujet',
                 'label_attr' => [
                     'class' => 'form-label mt-4'
+                ],
+                'constraints' => [
+                    new Assert\Length(['min' => 2, 'max' => 200])
                 ]
             ])
             ->add('message', TextType::class, [
@@ -57,6 +65,9 @@ class ContactType extends AbstractType
                 'label' => 'Message',
                 'label_attr' => [
                     'class' => 'form-label mt-4'
+                ],
+                'constraints' => [
+                    new Assert\NotBlank()
                 ]
             ])
             ->add('submit', SubmitType::class, [
