@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Contact;
 use App\Form\ContactType;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -43,16 +44,14 @@ class ContactController extends AbstractController
             $manager->flush();
 
             // email
-            $email = (new Email())
-                ->from('hello@example.com')
-                ->to('you@example.com')
-                //->cc('cc@example.com')
-                //->bcc('bcc@example.com')
-                //->replyTo('fabien@example.com')
-                //->priority(Email::PRIORITY_HIGH)
-                ->subject('Time for Symfony Mailer!')
-                ->text('Sending emails is fun again!')
-                ->html('<p>See Twig integration for better HTML integration!</p>');
+            $email = (new TemplatedEmail())
+                ->from($contact->getEmail())
+                ->to('admin@recipe-lovers.com')
+                ->subject($contact->getSubject())
+                ->htmlTemplate('email/contact.html.twig')
+                ->context([
+                    'contact' => $contact,
+                ]);
 
             $mailer->send($email);
 
