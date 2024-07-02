@@ -28,6 +28,17 @@ class AppFixtures extends Fixture
 
         // Users
         $users = [];
+
+        $admin = new User();
+        $admin->setFullName('Administrateur de Recipe lovers')
+            ->setPseudo(null)
+            ->setEmail('admin@recipe-lovers.com')
+            ->setRoles(['ROLE_USER', 'ROLE_ADMIN'])
+            ->setPassword('password');
+
+        $users[] = $admin;
+        $manager->persist($admin);
+
         // need to call UserPasswordHasherInterface to encode password via dependance injection
         for ($i = 0; $i < 10; $i++) {
             $user = new User();
