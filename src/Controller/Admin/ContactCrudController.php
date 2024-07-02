@@ -10,6 +10,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 
 class ContactCrudController extends AbstractCrudController
 {
@@ -22,7 +23,9 @@ class ContactCrudController extends AbstractCrudController
         return $crud
             ->setEntityLabelInSingular('Demande de contact')
             ->setEntityLabelInPlural('Demandes de contact')
-            ->setPageTitle('index', 'Recipe lovers - Admin des demandes de contact');
+            ->setPageTitle('index', 'Recipe lovers - Admin des demandes de contact')
+
+            ->addFormTheme('@FOSCKEditor/Form/ckeditor_widget.html.twig');
     }
 
     public function configureFields(string $pageName): iterable
@@ -33,7 +36,8 @@ class ContactCrudController extends AbstractCrudController
             TextField::new('fullName'),
             TextField::new('email'),
             TextAreaField::new('message')
-            ->hideOnIndex(),
+                ->setFormType(CKEditorType::class)
+                ->hideOnIndex(),
             DateTimeField::new('createdAt')
             ->hideOnForm()
         ];
