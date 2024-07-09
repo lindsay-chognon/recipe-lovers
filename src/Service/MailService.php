@@ -17,7 +17,7 @@ class MailService {
         string $from,
         string $subject,
         string $htmlTemplate,
-        string $context,
+        array $context,
         string $to = 'admin@recsipe-lovers.fr'
     ):void {
         // email
@@ -28,7 +28,6 @@ class MailService {
             ->htmlTemplate($htmlTemplate)
             ->context($context);
 
-        $this->send($email);
-    }
+        $this->mailer->send($email);    }
 
 }

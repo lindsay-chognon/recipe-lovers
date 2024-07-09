@@ -48,25 +48,20 @@ class ContactController extends AbstractController
                 ["contact" => $contact]
             );
 
-            // email
-            $email = (new TemplatedEmail())
-                ->from($contact->getEmail())
-                ->to('admin@recipe-lovers.com')
-                ->subject($contact->getSubject())
-                ->htmlTemplate('email/contact.html.twig')
-                ->context([
-                    'contact' => $contact,
-                ]);
-
-            $mailer->send($email);
-
             $this->addFlash(
                 'success',
                 'Votre message a bien été envoyé.'
             );
 
             return $this->redirectToRoute('contact');
+        } else {
+            $this->addFlash(
+                'danger',
+                "Erreur lors de l'envoi du formulaire"
+            );
         }
+
+
         return $this->render('pages/contact/index.html.twig', [
             'form' => $form->createView(),
         ]);
