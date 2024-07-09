@@ -7,17 +7,24 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class RecipeTest extends KernelTestCase
 {
+    // DRY
+    public function getEntity() : Recipe {
+        $recipe = new Recipe();
+        $recipe->setName('Name 1');
+        $recipe->setDescription('Description 1');
+        $recipe->isIsFavorite(true);
+        $recipe->setCreatedAt(new \DateTimeImmutable());
+        $recipe->setUpdatedAt(new \DateTimeImmutable());
+
+        return $recipe;
+    }
     public function testEntityIsValid(): void
     {
         self::bootKernel();
 
         $container = static::getContainer();
-        $recipe = new Recipe();
-        $recipe->setName('Recipe 1')
-            ->setDescription('Description 1')
-            ->setIsFavorite(true)
-            ->setCreatedAt(new \DateTimeImmutable())
-            ->setUpdatedAt(new \DateTimeImmutable());
+
+        $recipe = $this->getEntity();
 
         $errors = $container->get('validator')->validate($recipe);
 
@@ -28,13 +35,9 @@ class RecipeTest extends KernelTestCase
     public function testInvalidName() {
         self::bootKernel();
         $container = static::getContainer();
-        $recipe = new Recipe();
-        $recipe->setName('')
-            ->setDescription('Description 1')
-            ->setIsFavorite(true)
-            ->setCreatedAt(new \DateTimeImmutable())
-            ->setUpdatedAt(new \DateTimeImmutable());
 
+        $recipe = $this->getEntity();
+        $recipe->setName('');
 
         $errors = $container->get('validator')->validate($recipe);
 
