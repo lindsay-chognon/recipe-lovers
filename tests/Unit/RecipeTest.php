@@ -2,7 +2,9 @@
 
 namespace App\Tests\Unit;
 
+use App\Entity\Mark;
 use App\Entity\Recipe;
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class RecipeTest extends KernelTestCase
@@ -43,5 +45,20 @@ class RecipeTest extends KernelTestCase
 
         $this->assertCount(2, $errors);
 
+    }
+
+    public function testGetAverageRating() {
+        $recipe = $this->getEntity();
+        $user = static::getContainer()->get('doctrine.orm.entity_manager')->find(User::class, 1);
+
+        for ($i = 0; $i < 10; $i++) {
+            $mark = new Mark();
+            $mark->setMark(2);
+            $mark->setUser($user);
+            $mark->setRecipe($recipe);
+            $recipe->addMark($mark);
+        }
+
+        $this->assertTrue(2.0 === $recipe->getAverageRating());
     }
 }
