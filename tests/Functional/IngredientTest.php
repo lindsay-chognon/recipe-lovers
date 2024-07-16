@@ -73,4 +73,18 @@ class IngredientTest extends WebTestCase
 
         $this->assertResponseStatusCodeSame(200);
     }
+
+    public function testIfDeleteIngredientIsSuccesfull(): void {
+        $client = static::createClient();
+        $urlGenerator = $client->getContainer()->get('router');
+        $entityManager = $client->getContainer()->get('doctrine.orm.entity_manager');
+        $user = $entityManager->find(User::class, '1');
+        $ingredient = $entityManager->getRepository(Ingredient::class)->findOneBy([
+            'user' => $user,
+        ]);
+        $client->loginUser($user);
+        $client->request('GET', $urlGenerator->generate('ingredient.delete', ['id' => $ingredient->getId()]));
+
+        $this->assertResponseStatusCodeSame(302);
+    }
 }
