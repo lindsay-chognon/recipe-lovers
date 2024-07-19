@@ -6,7 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class HomePageTest extends WebTestCase
 {
-    public function testSomething(): void
+    public function testHomePageBalises(): void
     {
         // create a client link a web browser
         $client = static::createClient();
