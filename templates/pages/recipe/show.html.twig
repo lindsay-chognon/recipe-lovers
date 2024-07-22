@@ -28,7 +28,7 @@ Recipe lovers - {{ recipe.name }}
 
         <div class="mt-4">
             {% if recipe.time %}
-                <p>Temps (en minutes) : {{ recipe.time }}</p>
+                <p>Temps (en minutes) : {{ recipe.time|min_to_hour }}</p>
             {% else %}
                 <p>Temps non renseigné</p>
             {% endif %}
