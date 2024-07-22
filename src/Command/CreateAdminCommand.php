@@ -10,6 +10,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
@@ -36,10 +37,23 @@ class CreateAdminCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $helper = $this->getHelper('question');
         $io = new SymfonyStyle($input, $output);
         $fullname = $input->getArgument('full_name');
+        if (!$fullname) {
+            $question = new Question('Please enter your full name: ');
+            $fullname = $helper->ask($input, $output, $question);
+        }
         $email = $input->getArgument('email');
+        if (!$email) {
+            $question = new Question('Please enter your email: ');
+            $email = $helper->ask($input, $output, $question);
+        }
         $password = $input->getArgument('password');
+        if (!$password) {
+            $question = new Question('Please enter your password: ');
+            $password = $helper->ask($input, $output, $question);
+        }
 
         $user = new User();
         $user->setFullName($fullname)
