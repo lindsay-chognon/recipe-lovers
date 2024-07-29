@@ -40,6 +40,7 @@ class IngredientController extends AbstractController
         // try to get recipes probably alrady cached (system key / value)
         // if value is not found, we give the value with the collable (2nd arg of get)
         // More usefull on public recipes
+        // More usefull on public recipes
         $cache = new FilesystemAdapter();
         $data = $cache->get('ingredient', function(ItemInterface $item) use ($repository) {
             // expiration
