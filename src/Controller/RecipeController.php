@@ -12,10 +12,12 @@ use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Contracts\Cache\ItemInterface;
 
 class RecipeController extends AbstractController
 {
@@ -52,8 +54,20 @@ class RecipeController extends AbstractController
         PaginatorInterface $paginator,
         Request $request
     ) : Response {
+
+        /* cache */
+        // try to get recipes probably alrady cached (system key / value)
+        // if value is not found, we give the value with the collable (2nd arg of get)
+        $cache = new FilesystemAdapter();
+        $data = $cache->get('recipes', function(ItemInterface $item) use ($repository) {
+            // expiration
+            $item->expiresAfter(15);
+            return $repository->findPublicRecipes(null);
+
+        });
+
         $recipes = $paginator->paginate(
-            $repository->findPublicRecipes(null),
+            $data,
             $request->query->getInt('pages', 1)
         );
 
