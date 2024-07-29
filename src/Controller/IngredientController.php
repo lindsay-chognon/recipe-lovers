@@ -11,9 +11,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Cache\ItemInterface;
 
 class IngredientController extends AbstractController
 {
@@ -34,10 +36,21 @@ class IngredientController extends AbstractController
         ): Response
     {
 
+        /* cache */
+        // try to get recipes probably alrady cached (system key / value)
+        // if value is not found, we give the value with the collable (2nd arg of get)
+        // More usefull on public recipes
+        $cache = new FilesystemAdapter();
+        $data = $cache->get('ingredient', function(ItemInterface $item) use ($repository) {
+            // expiration
+            $item->expiresAfter(15);
+            $repository->findBy(['user' => $this->getUser()]);
+        });
+
         $ingredients = $paginator->paginate(
             // to get only user ingredients
             // $this->>getUser get current user from symfony token
-            $repository->findBy(['user' => $this->getUser()]),
+            $data,
             $request->query->getInt('page', 1),
             10
         );
